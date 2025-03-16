@@ -1,0 +1,49 @@
+# # # # # # # # # count = 10
+# # # # # # # # # while count>=7:
+# # # # # # # # #      print(count) 
+# # # # # # # # #      count -= 1
+
+# # # # # # # # ## for day in range(4):
+# # # # # # # # # #     print(f'Training Day #{day + 1}')
+
+# # # # # # # # for number in range(3,8):
+# # # # # # # #     print(f'this is the {number} number')
+  
+
+# # # # # # # total = 0  # Start with a sum of 0
+# # # # # # # for num in range(1, 10):  # range(1, 11) gives numbers 1 through 10
+# # # # # # #     total -= num  # Add each number to the running total
+
+# # # # # # # print(f"The sum of numbers from 1 to 10 is {total}")
+
+# # # # # # for letter in "Python":
+# # # # # #     print(letter, end="-")
+
+# # # # # # Print numbers 1-10, but stop if we hit 5
+# # # # # for num in range(1, 11):
+# # # # #     if num == 5:
+# # # # #         print("Found 5! Breaking the loop.")
+# # # # #         break
+# # # # #     print(num)
+
+# # # # # # Print only odd numbers from 1-10
+# # # # # for num in range(1, 11):
+# # # # #     if num % 2 == 0:  # If number is even
+# # # # #         continue      # Skip this iteration
+# # # # #     print(f"{num} is odd")
+# # # # # General pattern for summing
+# # # # result = 0  # Start with identity element
+# # # # for item in collection:
+# # # #     result += item  # Add each item to result
+# # # # Print a 3x3 multiplication table
+# # # for i in range(1, 4):  # Outer loop: rows
+# # #     for j in range(1, 4):  # Inner loop: columns
+# # #         product = i * j
+# # #         print(f"{i} × {j} = {product}")
+# # #     print("---")  # Separator between rows
+
+# # for x in range(1,10):
+
+number1 = 69.689
+print(f'the favourite place to be is {number1:-,.2f}')
+
