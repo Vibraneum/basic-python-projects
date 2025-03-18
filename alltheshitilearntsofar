@@ -1,0 +1,223 @@
+# # for x in range(3):
+# #     for y in range(6):
+# #         print("do something")
+
+# # x = 5
+
+# # while x > 0:
+# #     y = 2  # Resetting y inside outer loop
+# #     while y > 0:
+# #         print("poop")
+# #         y -= 1
+# #     x -= 1
+
+
+# # # rows = int(input('enter the # of row potats: '))
+# # # columns = int(input('enter the # of columns potats: '))
+# # # for x in range(rows):
+# # #     for y in range(columns):
+# # #         print("potato", end= ' ')
+# # #     print()
+
+# # # try:
+# # #     num = int(input("Enter a number: "))
+# # #     print(10 / num)
+# # # except ValueError:
+# # #     print("Not a number!")
+# # # except ZeroDivisionError:
+# # #     print("Can’t divide by zero!")
+
+# # # # Define the function
+# # # def player_stats(name, goals):
+# # #     # This is the "recipe"—it combines name and goals into a message
+# # #     message = f"{name} has scored {goals} goals! COYS!"  # f-string for formatting
+# # #     return message  # Sends the result back
+
+# # # # Call the function with arguments
+# # # result = player_stats("Kane", 10)  # "Kane" goes to name, 10 to goals
+# # # print(result)  # Output: Kane has scored 10 goals! COYS!
+
+# # # # Call it again with different values
+# # # print(player_stats("Son", 15))  # Output: Son has scored 15 goals! COYS!
+
+# # # # Create a tuple for a player’s stats
+# # # player_record = ("Kane", 10, "Striker")  # Immutable—can’t change once set
+# # # print(player_record)  # Output: ('Kane', 10, 'Striker')
+# # # print(player_record[0])  # Output: Kane (first item, index 0)
+# # # print(player_record[0:2])  # Output: (10, 'Striker') (slice from index 1)
+
+# # # # Trying to change it fails (uncomment to see error)
+# # # # player_record[0] = "Son"  # This would raise a TypeError
+
+# # def player_stats(name, goals):  # Define the function
+# #     message = f"{name} has scored {goals} goals!"  # Create a message
+# #     return message  # Send the message back
+# # result = player_stats("Kane", 10)  # Call with "Kane" for name, 10 for goals
+# # print(result)  # Output: Kane has scored 10 goals!
+# # print(player_stats('Son', 15))
+
+# # # def say_hello(player):
+# # #     greeting = f"Hello, {player}!"
+# # #     return greeting
+
+# # # print(say_hello("heung min sonn"))  # What do you think this will print?
+
+# # # player_record = ("Kane", 10, "Striker")  # A tuple with 3 items
+# # # print(player_record)  # Output: ('Kane', 10, 'Striker')
+# # # print(player_record[1:3])
+
+# # # match_result = ("Spurs", 2, "Arsenal", 1)  # Tuple of match details
+# # # print(match_result[1])  # What do you think this will print?
+
+# # # print(result.upper())
+# # # spaced_result = " ".join(result)
+# # # print(spaced_result)
+
+# # # Player information stored as tuples: (name, position, number, goals)
+# # player1 = ("Son Heung-min", "FW", 7, 14)
+# # player2 = ("James Maddison", "MF", 10, 5)
+# # player3 = ("Cristian Romero", "DF", 17, 2)
+
+# # # Create a list of player tuples
+# # squad = [player1, player2, player3]
+
+# # # Add a new player to the squad
+# # player4 = ('Kulusevski', 'FW', 21, 10)
+# # squad.append(player4)
+
+# # # Function to format player info as a string
+# # def format_player_info(player_tuple):
+# #     # Your code here - unpack the tuple and return a formatted string
+# #     name, position, number, goals = player_tuple
+# #     return f'#{number} {name} ({position} - {goals} goals)'
+
+# # # Create a list of formatted player information strings
+# # player_info_list = []
+# # for player in squad:
+# #     formatted_info = format_player_info(player)
+# #     player_info_list.append (formatted_info)
+
+# # squad_info = '\n'.join(player_info_list)
+# # print('Spurs squad')
+# # print(squad_info)
+# # # Your code here - loop through the squad and add formatted strings to player_info_list
+
+# # Join all the player information strings with line breaks and print
+# # Your code here
+
+# def say_hello(player, shout=False, cheer=False):
+#     greeting = f"Hello, {player}!"
+#     if shout:
+#         greeting.upper()  # All caps if shout is True
+#     if cheer:
+#        greeting += " COYS! "
+#     return greeting  # Normal if shout is False
+
+    
+# print(say_hello("Kane", True))  # Output: Hello, Kane!
+# print(say_hello("Son", False))  # Output: HELLO, SON!
+# print(say_hello('Kulusveski', False, True))
+
+# # def get_player_record(name, goals, position):
+# #     return (name, goals, position)  # Returns a tuple
+
+# # kane_record = get_player_record("Kane", 10, "Striker")
+# # print(kane_record)  # Output: ('Kane', 10, 'Striker')
+# # print(kane_record[2])  # Output: 10
+
+# # print(say_hello("Kane"))  # shout is False by default
+# # # Process: greeting = "Hello, Kane!", shout = False, so return "Hello, Kane!"
+# # # Output: Hello, Kane!
+# # print(say_hello("Kulusevski", True))  # Explicitly set shout to True
+# # # Process: greeting = "Hello, Son!", shout = True, so return "Hello, Son!".upper()
+# # # Output: HELLO, SON!
+
+# try:
+#     goals = int(input("Enter goals scored: "))  # Might fail if input is "abc"
+#     print(f"You scored {goals} goals!")
+# except ValueError:
+#     print("Error: Please enter a valid number (e.g., 10, not 'ten')!")
+
+# try:
+#     matches = int(input("Enter matches played: "))
+#     goals = int(input("Enter goals scored: "))
+#     goals_per_match = goals / matches  # Might fail if matches = 0
+#     print(f"Goals per match: {goals_per_match}")
+# except ValueError:
+#     print("Error: Matches and goals must be numbers!")
+# except ZeroDivisionError:
+#     print("Error: Matches cannot be zero!")
+
+# import random; print(random.randint(1, 5))
+
+# team = {"name": "Spurs", "points": 20}
+# print(team["points"])
+
+# try: 
+#     int(input("Goals: "))
+# except ValueError:
+#     print('put numbers dawg!')
+
+# d = {"x": 1}; d["x"] = 2; print(d["x"])
+
+# class Player:
+#     def __init__(self, name, goals):  # Constructor
+#         self.name = name  # Attribute: name
+#         self.goals = goals  # Attribute: goals
+
+# kane = Player("Kane", 10)  # Create object 'kane'
+# print(kane.name)  # Output: Kane
+# print(kane.goals)  # Output: 10
+
+# son = Player("Son", 15)  # Create another object 'son'
+# print(son.name)  # Output: Son
+# print(son.goals)  # Output: 15
+
+# class Player:
+#     def __init__(self, name, goals):
+#         self.name = name
+#         self.goals = goals
+#     def celebrate(self):  # Method
+#         return f"{self.name} scores and celebrates! COYS!"
+#     def add_goal(self):  # Another method
+#         self.goals = self.goals + 1
+#         return f"{self.name} now has {self.goals} goals!"
+# kane = Player("Kane", 10)
+# print(kane.celebrate())  # Output: Kane scores and celebrates! COYS!
+# print(kane.add_goal())  # Output: Kane now has 11 goals!
+# print(kane.goals)  # Output: 11 (updated)  
+# son = Player("Son", 15)
+# print(son.celebrate())  # Output: Son scores and celebrates! COYS!
+# print(son.add_goal())  # Output: Son now has 16 goals!
+    
+# class Team:
+#     def __init__(self, name, points):
+#         self.name = name
+#         self.points = points
+#     def win(self):
+#         self.points = self.points + 3
+#         return f"{self.name} wins! Now has {self.points} points!"
+
+# spurs = Team("Tottenham", 20)
+# print(spurs.name)  # Output: Tottenham
+# print(spurs.points)  # Output: 20
+# print(spurs.win())  # Output: Tottenham wins! Now has 23 points!
+# arsenal = Team("Arsenal", 18)
+# print(arsenal.win)
+
+# class Match: 
+#     def __init__(self, team1, score):
+#         self.team1 = team1
+#         self.score = score 
+#     def result(self):
+#         return f"{self.team1} scored {self.score}"
+    
+# spurs = Match("tottenham", 20)
+# print(spurs.team1)
+# print(spurs.score)
+# arsenal = Match("arsenal", 15)
+# arsenal.result()
+# print(arsenal.score)
+# print(arsenal.team1)
+
+
