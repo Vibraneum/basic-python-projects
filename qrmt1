@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Square & Cryptography Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            cursor: pointer;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .tab-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .content-section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .magic-square {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            gap: 5px;
+            margin: 20px auto;
+            width: fit-content;
+        }
+        
+        .cell {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        
+        .cell:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+        
+        .cell.center {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            animation: pulse 2s infinite;
+        }
+        
+        .cell.highlight {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .sum-display {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 20px;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .explanation {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .cipher-demo {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        input, select {
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 5px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .result {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border: 2px solid #667eea;
+            font-family: monospace;
+            font-size: 18px;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            color: #764ba2;
+            margin: 15px 0 10px 0;
+        }
+        
+        .formula {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        .line-indicator {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e7f3ff;
+            border-radius: 10px;
+        }
+        
+        .opposite-pairs {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .pair {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .pair-cell {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Magic Squares & Cryptography Interactive Guide</h1>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('magic1')">Magic Square Basics</button>
+            <button class="tab-button" onclick="showTab('magic2')">Opposite Pairs</button>
+            <button class="tab-button" onclick="showTab('transform')">Transformations</button>
+            <button class="tab-button" onclick="showTab('shift')">Shift Cipher</button>
+            <button class="tab-button" onclick="showTab('hybrid')">Hybrid Encryption</button>
+        </div>
+        
+        <!-- Magic Square Basics -->
+        <div id="magic1" class="content-section active">
+            <h2>Magic Square: Center Property</h2>
+            
+            <div class="explanation">
+                <strong>Key Concept:</strong> In a 3×3 magic square, the center element equals S/3, where S is the magic sum.
+            </div>
+            
+            <div class="magic-square" id="loShu">
+                <div class="cell">8</div>
+                <div class="cell">1</div>
+                <div class="cell">6</div>
+                <div class="cell">3</div>
+                <div class="cell center">5</div>
+                <div class="cell">7</div>
+                <div class="cell">4</div>
+                <div class="cell">9</div>
+                <div class="cell">2</div>
+            </div>
+            
+            <div class="sum-display">Magic Sum: 15 | Center: 5 = 15/3 ✓</div>
+            
+            <div class="line-indicator">
+                <h3>Lines Through Center (5):</h3>
+                <p>🔵 Middle Row: 3 + 5 + 7 = 15</p>
+                <p>🔵 Middle Column: 1 + 5 + 9 = 15</p>
+                <p>🔵 Main Diagonal: 8 + 5 + 2 = 15</p>
+                <p>🔵 Anti-Diagonal: 6 + 5 + 4 = 15</p>
+                <p style="margin-top: 15px; color: #667eea;"><strong>Total of 4 lines = 4 × 15 = 60</strong></p>
+            </div>
+            
+            <div class="explanation">
+                <h3>Why center = S/3?</h3>
+                <p><strong>Step 1:</strong> Sum of 4 lines through center = 4S = 60</p>
+                <p><strong>Step 2:</strong> In this sum, center appears 4 times, all other cells appear once</p>
+                <p><strong>Step 3:</strong> 4S = 4×(center) + (sum of other 8 cells)</p>
+                <p><strong>Step 4:</strong> Sum of all 9 cells = 3S = 45</p>
+                <p><strong>Step 5:</strong> So (sum of other 8 cells) = 3S - center = 45 - 5 = 40</p>
+                <p><strong>Step 6:</strong> Therefore: 60 = 4×5 + 40 ✓</p>
+                <p style="margin-top: 10px;"><strong>Formula:</strong> 4S = 4×center + (3S - center) → S = 3×center</p>
+            </div>
+        </div>
+        
+        <!-- Opposite Pairs -->
+        <div id="magic2" class="content-section">
+            <h2>Opposite Pairs Property</h2>
+            
+            <div class="explanation">
+                <strong>Key Concept:</strong> Any pair of cells opposite across the center sums to 2S/3.
+            </div>
+            
+            <div class="magic-square">
+                <div class="cell highlight">8</div>
+                <div class="cell highlight">1</div>
+                <div class="cell highlight">6</div>
+                <div class="cell highlight">3</div>
+                <div class="cell center">5</div>
+                <div class="cell highlight">7</div>
+                <div class="cell highlight">4</div>
+                <div class="cell highlight">9</div>
+                <div class="cell highlight">2</div>
+            </div>
+            
+            <div class="opposite-pairs">
+                <div class="pair">
+                    <div class="pair-cell">8</div>
+                    <span style="font-size: 24px;">+</span>
+                    <div class="pair-cell">2</div>
+                    <span style="font-size: 24px;">=</span>
+                    <div class="pair-cell">10</div>
+                </div>
+                <div class="pair">
+                    <div class="pair-cell">1</div>
+                    <span style="font-size: 24px;">+</span>
+                    <div class="pair-cell">9</div>
+                    <span style="font-size: 24px;">=</span>
+                    <div class="pair-cell">10</div>
+                </div>
+                <div class="pair">
+                    <div class="pair-cell">6</div>
+                    <span style="font-size: 24px;">+</span>
+                    <div class="pair-cell">4</div>
+                    <span style="font-size: 24px;">=</span>
+                    <div class="pair-cell">10</div>
+                </div>
+                <div class="pair">
+                    <div class="pair-cell">3</div>
+                    <span style="font-size: 24px;">+</span>
+                    <div class="pair-cell">7</div>
+                    <span style="font-size: 24px;">=</span>
+                    <div class="pair-cell">10</div>
+                </div>
+            </div>
+            
+            <div class="formula">
+                Each pair = 2S/3 = 2(15)/3 = 10
+            </div>
+            
+            <div class="explanation">
+                <h3>Proof:</h3>
+                <p>Any line through center has form: a + x + b = S</p>
+                <p>Since x = S/3 (from previous property):</p>
+                <p>a + S/3 + b = S</p>
+                <p>a + b = S - S/3 = 2S/3</p>
+                <p style="margin-top: 15px; color: #667eea;"><strong>Therefore: a + b = 10 ✓</strong></p>
+            </div>
+        </div>
+        
+        <!-- Transformations -->
+        <div id="transform" class="content-section">
+            <h2>Linear Transformations: f(t) = at + b</h2>
+            
+            <div class="explanation">
+                <strong>Amazing Property:</strong> If you apply the same linear transformation to every cell, you get another magic square!
+            </div>
+            
+            <h3>Example: Transform to Odd Numbers</h3>
+            <p>Use f(t) = 2t - 1 to convert {1,2,3,4,5,6,7,8,9} to {1,3,5,7,9,11,13,15,17}</p>
+            
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin: 30px 0;">
+                <div>
+                    <h3 style="text-align: center;">Original Lo Shu</h3>
+                    <div class="magic-square">
+                        <div class="cell">8</div>
+                        <div class="cell">1</div>
+                        <div class="cell">6</div>
+                        <div class="cell">3</div>
+                        <div class="cell center">5</div>
+                        <div class="cell">7</div>
+                        <div class="cell">4</div>
+                        <div class="cell">9</div>
+                        <div class="cell">2</div>
+                    </div>
+                    <div class="sum-display">Magic Sum = 15</div>
+                </div>
+                
+                <div style="display: flex; align-items: center; font-size: 48px; color: #667eea;">
+                    →
+                </div>
+                
+                <div>
+                    <h3 style="text-align: center;">Transformed (Odd Numbers)</h3>
+                    <div class="magic-square">
+                        <div class="cell">15</div>
+                        <div class="cell">1</div>
+                        <div class="cell">11</div>
+                        <div class="cell">5</div>
+                        <div class="cell center">9</div>
+                        <div class="cell">13</div>
+                        <div class="cell">7</div>
+                        <div class="cell">17</div>
+                        <div class="cell">3</div>
+                    </div>
+                    <div class="sum-display">Magic Sum = 27</div>
+                </div>
+            </div>
+            
+            <div class="formula">
+                New Magic Sum = aS + nb = 2(15) + 3(-1) = 30 - 3 = 27 ✓
+            </div>
+            
+            <div class="explanation">
+                <h3>Try Your Own Transformation:</h3>
+                <label>a = <input type="number" id="transA" value="2" style="width: 80px;"></label>
+                <label>b = <input type="number" id="transB" value="-1" style="width: 80px;"></label>
+                <button onclick="transformSquare()">Transform!</button>
+                
+                <div id="transformResult" class="result" style="display: none;">
+                    <h4>Transformed Square:</h4>
+                    <div id="transformedSquare"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Shift Cipher -->
+        <div id="shift" class="content-section">
+            <h2>Shift Cipher (Caesar Cipher)</h2>
+            
+            <div class="explanation">
+                <strong>How it works:</strong> Each letter is shifted by k positions in the alphabet.
+                <p>A=0, B=1, C=2, ..., Z=25</p>
+            </div>
+            
+            <div class="cipher-demo">
+                <h3>Encrypt Your Message:</h3>
+                <label>Message: <input type="text" id="plaintext" value="CAT" style="text-transform: uppercase;"></label>
+                <label>Key (shift): <input type="number" id="key" value="3" min="0" max="25" style="width: 80px;"></label>
+                <button onclick="encryptShift()">Encrypt</button>
+                <button onclick="decryptShift()">Decrypt</button>
+                
+                <div id="cipherResult" class="result" style="display: none;">
+                    <h4>Encryption Process:</h4>
+                    <div id="encryptSteps"></div>
+                    <h4 style="margin-top: 15px;">Ciphertext:</h4>
+                    <div id="ciphertext" style="font-size: 24px; color: #667eea; font-weight: bold;"></div>
+                </div>
+            </div>
+            
+            <div class="formula">
+                Encryption: Enc(m, k) = (m + k) mod 26
+                <br>
+                Decryption: Dec(c, k) = (c - k) mod 26
+            </div>
+            
+            <div class="explanation">
+                <h3>Example: CAT with key = 3</h3>
+                <p><strong>C (2):</strong> (2 + 3) mod 26 = 5 = F</p>
+                <p><strong>A (0):</strong> (0 + 3) mod 26 = 3 = D</p>
+                <p><strong>T (19):</strong> (19 + 3) mod 26 = 22 = W</p>
+                <p style="margin-top: 15px; color: #667eea;"><strong>Ciphertext: FDW</strong></p>
+                
+                <p style="margin-top: 20px;"><strong>Decryption:</strong></p>
+                <p><strong>F (5):</strong> (5 - 3) mod 26 = 2 = C</p>
+                <p><strong>D (3):</strong> (3 - 3) mod 26 = 0 = A</p>
+                <p><strong>W (22):</strong> (22 - 3) mod 26 = 19 = T</p>
+                <p style="margin-top: 15px; color: #667eea;"><strong>Plaintext: CAT ✓</strong></p>
+            </div>
+        </div>
+        
+        <!-- Hybrid Encryption -->
+        <div id="hybrid" class="content-section">
+            <h2>Hybrid Encryption</h2>
+            
+            <div class="explanation">
+                <strong>The Problem:</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Symmetric encryption (like AES) is FAST but needs secure key sharing</li>
+                    <li>Asymmetric encryption (like RSA) solves key sharing but is SLOW</li>
+                </ul>
+                <strong style="display: block; margin-top: 15px;">The Solution: Use both!</strong>
+            </div>
+            
+            <div style="background: #f8f9ff; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3 style="color: #667eea;">🔐 How Alice Sends to Bob:</h3>
+                
+                <div style="margin: 20px 0; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #4facfe;">
+                    <strong>Step 1:</strong> Alice generates random symmetric key k
+                </div>
+                
+                <div style="margin: 20px 0; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #4facfe;">
+                    <strong>Step 2:</strong> Alice encrypts her message m with key k<br>
+                    <code style="background: #f0f0f0; padding: 5px; border-radius: 3px;">c₁ = Enc_symmetric(m, k)</code>
+                    <br><span style="color: #28a745;">✓ Fast! Works for large messages</span>
+                </div>
+                
+                <div style="margin: 20px 0; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #f093fb;">
+                    <strong>Step 3:</strong> Alice encrypts key k with Bob's RSA public key<br>
+                    <code style="background: #f0f0f0; padding: 5px; border-radius: 3px;">c₂ = k^e mod N</code>
+                    <br><span style="color: #28a745;">✓ Secure! Key is small, so RSA is fine</span>
+                </div>
+                
+                <div style="margin: 20px 0; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <strong>Step 4:</strong> Alice sends (c₁, c₂) to Bob
+                </div>
+            </div>
+            
+            <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3 style="color: #856404;">🔓 How Bob Decrypts:</h3>
+                
+                <div style="margin: 15px 0;">
+                    <strong>Step 1:</strong> Bob decrypts c₂ with his RSA private key d<br>
+                    <code>k = (c₂)^d mod N</code><br>
+                    <span style="color: #856404;">→ Bob recovers the symmetric key k</span>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>Step 2:</strong> Bob decrypts c₁ with key k<br>
+                    <code>m = Dec_symmetric(c₁, k)</code><br>
+                    <span style="color: #856404;">→ Bob recovers the original message m ✓</span>
+                </div>
+            </div>
+            
+            <div style="background: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3 style="color: #721c24;">⚠️ Why NOT encrypt message directly with RSA?</h3>
+                
+                <div style="margin: 15px 0;">
+                    <strong>❌ Too Slow:</strong> RSA is 100-1000× slower than symmetric encryption<br>
+                    <span style="color: #721c24;">• 10 MB file: AES ~10ms, RSA ~10 seconds</span>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>❌ Message Size Limit:</strong> RSA can only encrypt ~256 bytes<br>
+                    <span style="color: #721c24;">• Most messages are longer!</span>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>❌ Security Issues:</strong> Deterministic encryption vulnerable to attacks<br>
+                    <span style="color: #721c24;">• Same message → same ciphertext (bad!)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function transformSquare() {
+            const a = parseInt(document.getElementById('transA').value);
+            const b = parseInt(document.getElementById('transB').value);
+            const original = [8, 1, 6, 3, 5, 7, 4, 9, 2];
+            const transformed = original.map(t => a * t + b);
+            
+            const S = 15;
+            const newS = a * S + 3 * b;
+            
+            let html = '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: fit-content; margin: 15px auto;">';
+            transformed.forEach((val, i) => {
+                const isCenterIndex = i === 4;
+                html += `<div style="padding: 15px; background: ${isCenterIndex ? '#f093fb' : '#667eea'}; color: white; text-align: center; border-radius: 8px; font-size: 20px; font-weight: bold;">${val}</div>`;
+            });
+            html += '</div>';
+            html += `<p style="text-align: center; margin-top: 15px; color: #667eea; font-size: 18px;"><strong>New Magic Sum = ${a}(${S}) + 3(${b}) = ${newS}</strong></p>`;
+            
+            // Verify one row
+            const rowSum = transformed[0] + transformed[1] + transformed[2];
+            html += `<p style="text-align: center; color: #28a745;">✓ Top row: ${transformed[0]} + ${transformed[1]} + ${transformed[2]} = ${rowSum}</p>`;
+            
+            document.getElementById('transformedSquare').innerHTML = html;
+            document.getElementById('transformResult').style.display = 'block';
+        }
+        
+        function charToNum(char) {
+            return char.toUpperCase().charCodeAt(0) - 65;
+        }
+        
+        function numToChar(num) {
+            return String.fromCharCode((num % 26) + 65);
+        }
+        
+        function encryptShift() {
+            const plaintext = document.getElementById('plaintext').value.toUpperCase().replace(/[^A-Z]/g, '');
+            const key = parseInt(document.getElementById('key').value);
+            
+            let steps = '';
+            let ciphertext = '';
+            
+            for (let char of plaintext) {
+                const m = charToNum(char);
+                const c = (m + key) % 26;
+                const cipherChar = numToChar(c);
+                
+                steps += `<p><strong>${char} (${m}):</strong> (${m} + ${key}) mod 26 = ${c} = <strong>${cipherChar}</strong></p>`;
+                ciphertext += cipherChar;
+            }
+            
+            document.getElementById('encryptSteps').innerHTML = steps;
+            document.getElementById('ciphertext').innerHTML = ciphertext;
+            document.getElementById('cipherResult').style.display = 'block';
+        }
+        
+        function decryptShift() {
+            const ciphertext = document.getElementById('plaintext').value.toUpperCase().replace(/[^A-Z]/g, '');
+            const key = parseInt(document.getElementById('key').value);
+            
+            let steps = '<h4>Decryption Process:</h4>';
+            let plaintext = '';
+            
+            for (let char of ciphertext) {
+                const c = charToNum(char);
+                const m = (c - key + 26) % 26;
+                const plainChar = numToChar(m);
+                
+                steps += `<p><strong>${char} (${c}):</strong> (${c} - ${key}) mod 26 = ${m} = <strong>${plainChar}</strong></p>`;
+                plaintext += plainChar;
+            }
+            
+            document.getElementById('encryptSteps').innerHTML = steps;
+            document.getElementById('ciphertext').innerHTML = plaintext;
+            document.getElementById('cipherResult').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
